@@ -1,8 +1,8 @@
 using AutoMapper;
-using Commander.Dtos;
-using Commander.Models;
+using API.Dtos;
+using API.Models;
 
-namespace Commander.Profiles
+namespace API.Profiles
 {
     public class CategoryProfile : Profile
     {
