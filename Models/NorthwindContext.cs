@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 
-namespace Commander.Models
+namespace API.Models
 {
     public partial class NorthwindContext : DbContext
     {

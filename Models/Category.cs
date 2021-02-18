@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
-namespace Commander.Models
+namespace API.Models
 {
     public partial class Category
     {

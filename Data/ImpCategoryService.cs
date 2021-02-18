@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using Commander.Models;
+using API.Models;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
-using Commander.Encode;
+using API.Encode;
 using Newtonsoft.Json;
 using System.Transactions;
 
-namespace Commander.Data
+namespace API.Data
 {
     public class ImpCategoryService : ICategoryService
     {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace Commander.Models
+namespace API.Models
 {
     public partial class _NorthwindContext : DbContext
     {

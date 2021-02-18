@@ -1,4 +1,4 @@
-namespace Commander.Dtos
+namespace API.Dtos
 {
     public partial class CategoryReadDto
     {
