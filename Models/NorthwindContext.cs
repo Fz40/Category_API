@@ -1,15 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace API.Models
 {
-    public partial class NorthwindContext : DbContext
+    //* IdentityDbContext contains all the user tables
+    public partial class NorthwindContext : IdentityDbContext
     {
         public NorthwindContext(DbContextOptions<NorthwindContext> options)
             : base(options)
         {
         }
         public DbSet<Category> Category { get; set; }
+        public DbSet<User> User { get; set; }
         //public virtual DbSet<Category> Category { get; set; }
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

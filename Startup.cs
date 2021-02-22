@@ -16,6 +16,11 @@ using API.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace API
 {
@@ -31,8 +36,52 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
-            services.AddControllers();
+            //* สามารถทำให้ ไคลแอน ที่อยู่คนละโดเมน สามารถเรียกใช้ API ได้
+            services.AddCors(option =>
+            {
+                option.AddPolicy("CorsPolicy", builder =>
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .Build());
+            });
+
+            //* ใช้สำหรับการเรียกใช้ HttpPacth ของ API
+            services.AddControllers().AddNewtonsoftJson(s =>
+            {
+                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+
+            //* เพิ่มเพื่อจัดการการ Login 
+            services.AddIdentity<IdentityUser, IdentityRole>()
+            .AddEntityFrameworkStores<NorthwindContext>()
+            .AddDefaultTokenProviders();
+
+            //* เพิ่ม config JWT
+            services.AddAuthentication(cfg =>
+
+                {
+                    cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    cfg.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["JWT:Issuer"],
+                        ValidAudience = Configuration["JWT:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
+                    };
+                }
+
+            );
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -46,6 +95,8 @@ namespace API
 
             //* services.AddScoped<IBoxB, BoxB>(); เป็นการทำ Dependency Injection (DI)
             services.AddScoped<ICategoryService, ImpCategoryService>();
+            services.AddScoped<IUserService, ImpUserService>();
+            services.AddScoped<IAuthenService, ImpAuthenService>();
 
             // using Microsoft.EntityFrameworkCore;
             services.AddDbContext<NorthwindContext>(options =>
@@ -65,6 +116,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.JsonPatch;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using API.Encode;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/category")]
     [ApiController]
     public class CategoryController : ControllerBase
